@@ -4,12 +4,12 @@ import Navbar from "@/components/navbar/Navbar";
 import { useAuth } from "@/contexts/AuthContext";
 import useUsers from "@/store/UserStore";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import ProfileForm from "@/components/profileForm/ProfileForm";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { user, isAuthenticated, loading } = useAuth();
-  const { imageUrl } = useUsers();
+  const { imageUrl, changeRole, errors } = useUsers();
   const [showForm, setShowForm] = useState(false);
   const router = useRouter();
 
@@ -21,6 +21,13 @@ const ProfilePage = () => {
   }, [isAuthenticated, loading, user]);
 
   useEffect(() => {}, [showForm]);
+
+  const handleChangeRole = async (uid) => {
+    await changeRole(uid);
+
+    if (errors.error) return toast.error(errors.error);
+    toast.success("Change Role Successfully");
+  }
 
   return (
     <>
@@ -43,17 +50,24 @@ const ProfilePage = () => {
                       `${imageUrl}/profiles/${user?.profilePicture}` ||
                       "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
                     }
+                    alt="Profile Picture"
                   />
                 </div>
               </div>
               <p className="text-lg font-semibold">Email: {user?.email}</p>
               <p className="text-lg font-semibold">Role: {user?.role}</p>
-              <div className="flex justify-center mt-8">
+              <div className="flex justify-around items-center mt-8">
+                <button
+                  className="btn btn-neutral mr-4"
+                  onClick={() => handleChangeRole(user?.id)}
+                >
+                  Change Role
+                </button>
                 <button
                   className="btn btn-primary mr-4"
                   onClick={() => setShowForm(!showForm)}
                 >
-                  Edit Profile
+                  Add Profile Picture
                 </button>
               </div>
             </>

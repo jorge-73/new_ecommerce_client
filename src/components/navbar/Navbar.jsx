@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import useUsers from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -62,7 +63,7 @@ const Navbar = () => {
               )}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">Ecommerce</a>
+          <Link href={"/"} className="btn btn-ghost text-xl">Ecommerce</Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -89,7 +90,23 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-        <div className="navbar-end dropdown dropdown-end text-end px-5">
+        <div className="navbar-end dropdown dropdown-end text-end px-5 flex items-center">
+          {/* Carrito Icon */}
+          {isAuthenticated && (
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar relative"
+              style={{ fontSize: "1.5rem" }} // Ajustar el tamaño del icono
+            >
+              <FaShoppingCart />
+              <sup className="transform -translate-x-2">
+                0
+              </sup>{" "}
+              {/* Ajustar la posición de la etiqueta */}
+            </div>
+          )}
+
           <div
             tabIndex={0}
             role="button"
@@ -108,7 +125,7 @@ const Navbar = () => {
           {isAuthenticated && (
             <ul
               tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+              className="mt-44 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
                 <span>User: {user.full_name}</span>
