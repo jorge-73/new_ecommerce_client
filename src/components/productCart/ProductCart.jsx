@@ -1,12 +1,17 @@
-import React from "react";
+import Link from "next/link";
 
 const ProductCart = (product) => {
+  const thumbnailUrl = product?.product?.thumbnails.length > 0
+  ? product?.product?.thumbnails[0]
+  : "/notAvailable.png" 
+
   return (
-    <div className="card glass text-white w-3/4 md:w-full mx-auto">
+    <div className="card glass text-white w-3/4 md:w-full mx-auto hover:cursor-pointer">
       <figure>
         <img
-          src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-          alt="car!"
+          src={thumbnailUrl}
+          alt={product?.product?.title}
+          className=" w-full"
         />
       </figure>
       <div className="card-body">
@@ -14,7 +19,7 @@ const ProductCart = (product) => {
         <p>{product?.product?.description}</p>
         <p>${product?.product?.price}</p>
         <div className="card-actions justify-between items-center">
-          <button className="btn btn-accent">Info</button>
+          <Link href={`/products/${product?.product?._id}`} className="btn btn-accent">Info</Link>
           <button className="btn btn-primary">Buy now!</button>
         </div>
       </div>

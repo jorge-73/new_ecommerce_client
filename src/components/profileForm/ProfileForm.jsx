@@ -5,15 +5,15 @@ import toast from "react-hot-toast";
 
 const ProfileForm = ({ user }) => {
   const { register, setValue, handleSubmit } = useForm();
-  const { addFiles, errors } = useUsers();
+  const { addFiles } = useUsers();
 
   const onSubmit = handleSubmit(async (data) => {
     const formData = new FormData();
     formData.append("fileType", data.fileType);
     formData.append("files", data.files[0]);
-    await addFiles(user?.id, formData);
+    const res = await addFiles(user?.id, formData);
 
-    if (errors.error) return toast.error(errors.error);
+    if (res?.error) return toast.error(res?.error);
 
     toast.success("Add profile image successfully");
     setValue("files", "");
@@ -25,7 +25,7 @@ const ProfileForm = ({ user }) => {
         <form encType="multipart/form-data" onSubmit={onSubmit}>
           <div className="mb-3 flex items-center justify-evenly">
             <label htmlFor="fileType" className="label">
-              Tipo de archivo
+              Type of file
             </label>
             <select
               id="fileType"
@@ -39,7 +39,7 @@ const ProfileForm = ({ user }) => {
           </div>
           <div className="mb-3 flex items-center justify-evenly">
             <label htmlFor="file" className="label">
-              Archivo
+              File
             </label>
             <input
               type="file"
@@ -51,7 +51,7 @@ const ProfileForm = ({ user }) => {
             />
           </div>
           <button type="submit" className="btn btn-primary block mx-auto">
-            Cargar Archivo
+            File upload
           </button>
         </form>
       </div>

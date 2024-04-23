@@ -23,11 +23,11 @@ const ProfilePage = () => {
   useEffect(() => {}, [showForm]);
 
   const handleChangeRole = async (uid) => {
-    await changeRole(uid);
+    const res = await changeRole(uid);
 
-    if (errors.error) return toast.error(errors.error);
+    if (res?.error) return toast.error(res?.error);
     toast.success("Change Role Successfully");
-  }
+  };
 
   return (
     <>
@@ -47,8 +47,9 @@ const ProfilePage = () => {
                 <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                   <img
                     src={
-                      `${imageUrl}/profiles/${user?.profilePicture}` ||
-                      "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                      user?.profilePicture
+                        ? `${imageUrl}/profiles/${user?.profilePicture}`
+                        : "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
                     }
                     alt="Profile Picture"
                   />
@@ -67,7 +68,7 @@ const ProfilePage = () => {
                   className="btn btn-primary mr-4"
                   onClick={() => setShowForm(!showForm)}
                 >
-                  Add Profile Picture
+                  Add Files
                 </button>
               </div>
             </>

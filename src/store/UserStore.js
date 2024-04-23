@@ -20,6 +20,7 @@ const useUsers = create((set) => ({
       await addFilesRequest(uid, data);
     } catch (error) {
       set({ errors: error.response.data, loading: false });
+      return error.response.data;
     }
   },
 }));

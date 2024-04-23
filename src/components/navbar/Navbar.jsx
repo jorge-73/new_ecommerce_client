@@ -4,7 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import useUsers from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { FaShoppingCart } from "react-icons/fa";
+// import { FaShoppingCart } from "react-icons/fa";
+import CartModal from "../cartModal/CartModal";
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -63,7 +64,9 @@ const Navbar = () => {
               )}
             </ul>
           </div>
-          <Link href={"/"} className="btn btn-ghost text-xl">Ecommerce</Link>
+          <Link href={"/"} className="btn btn-ghost text-xl">
+            Ecommerce
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -77,7 +80,18 @@ const Navbar = () => {
                   Products
                 </Link>
               </li>
-            )}{" "}
+            )}
+            {user && user?.role === "admin" && (
+              <li>
+                <Link
+                  href={"/admin"}
+                  className="font-bold text-lg
+                "
+                >
+                  Admin
+                </Link>
+              </li>
+            )}
             {!isAuthenticated && (
               <>
                 <li>
@@ -90,56 +104,52 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-        <div className="navbar-end dropdown dropdown-end text-end px-5 flex items-center">
+        <div className="navbar-end">
           {/* Carrito Icon */}
           {isAuthenticated && (
             <div
+              className="btn btn-ghost btn-circle avatar relative"
+              style={{ fontSize: "1.5rem" }}
+            >
+              <CartModal />
+            </div>
+          )}
+          <div className="dropdown dropdown-end text-end pe-3 flex items-center">
+            <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar relative"
-              style={{ fontSize: "1.5rem" }} // Ajustar el tamaño del icono
+              className="btn btn-ghost btn-circle avatar"
             >
-              <FaShoppingCart />
-              <sup className="transform -translate-x-2">
-                0
-              </sup>{" "}
-              {/* Ajustar la posición de la etiqueta */}
+              <div className="w-10 rounded-full">
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src={
+                    user?.profilePicture
+                      ? `${imageUrl}/profiles/${user?.profilePicture}`
+                      : "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  }
+                />
+              </div>
             </div>
-          )}
-
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src={
-                  `${imageUrl}/profiles/${user?.profilePicture}` ||
-                  "https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                }
-              />
-            </div>
+            {isAuthenticated && (
+              <ul
+                tabIndex={0}
+                className="mt-44 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <span>User: {user.full_name}</span>
+                </li>
+                <li>
+                  <Link href={"/profile"} className="justify-between">
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              </ul>
+            )}
           </div>
-          {isAuthenticated && (
-            <ul
-              tabIndex={0}
-              className="mt-44 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <span>User: {user.full_name}</span>
-              </li>
-              <li>
-                <Link href={"/profile"} className="justify-between">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
-            </ul>
-          )}
         </div>
       </div>
     </nav>
