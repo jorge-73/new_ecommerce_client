@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import CartModal from "../cartModal/CartModal";
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, loading, logout } = useAuth();
   const { imageUrl } = useUsers();
   const router = useRouter();
 
@@ -52,7 +52,7 @@ const Navbar = () => {
                   </Link>
                 </li>
               )}{" "}
-              {!isAuthenticated && (
+              {!isAuthenticated && !loading && (
                 <>
                   <li>
                     <Link href={"/login"}>Login</Link>
@@ -92,7 +92,7 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
-            {!isAuthenticated && (
+            {!isAuthenticated && !loading && (
               <>
                 <li>
                   <Link href={"/login"}>Login</Link>

@@ -1,7 +1,15 @@
-import { FaTrashAlt } from "react-icons/fa";
-import { FaRegEdit } from "react-icons/fa";
+"use client";
+import { useEffect } from "react";
+import useProduct from "@/store/ProductStore";
+import Tabletr from "./Tabletr";
 
 const AdminTable = () => {
+  const { products, getProducts } = useProduct();
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <div className="flex justify-center py-10">
       <div className="overflow-x-auto">
@@ -16,52 +24,14 @@ const AdminTable = () => {
               <th>Code</th>
               <th>Category</th>
               <th>Stock</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            <tr className="hover hover:text-black">
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td className="flex justify-center items-center">
-                <button className="btn btn-sm btn-error me-1"><FaTrashAlt /></button>
-                <button className="btn btn-sm btn-info me-1"><FaRegEdit /></button>
-              </td>
-            </tr>
-            {/* row 2 */}
-            <tr className="hover hover:text-black">
-              <th>2</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td className="flex justify-center items-center">
-                <button className="btn btn-sm btn-error me-1"><FaTrashAlt /></button>
-                <button className="btn btn-sm btn-info me-1"><FaRegEdit /></button>
-              </td>
-            </tr>
-            {/* row 3 */}
-            <tr className="hover hover:text-black">
-              <th>3</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-              <td className="flex justify-center items-center">
-                <button className="btn btn-sm btn-error me-1"><FaTrashAlt /></button>
-                <button className="btn btn-sm btn-info me-1"><FaRegEdit /></button>
-              </td>
-            </tr>
+            {products &&
+              products.map((prod, idx) => (
+                <Tabletr key={idx} product={prod} num={idx} />
+              ))}
           </tbody>
         </table>
       </div>
