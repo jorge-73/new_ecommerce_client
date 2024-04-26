@@ -1,16 +1,27 @@
 "use client";
+import { useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import useUsers from "@/store/UserStore";
+import useCart from "@/store/CartStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-// import { FaShoppingCart } from "react-icons/fa";
 import CartModal from "../cartModal/CartModal";
 
 const Navbar = () => {
+  const { getCart, cart } = useCart();
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { imageUrl } = useUsers();
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      const getCartUser = async () => {
+        await getCart(user?.cart);
+      };
+      getCartUser();
+    }
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -111,7 +122,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar relative"
               style={{ fontSize: "1.5rem" }}
             >
-              <CartModal />
+              <CartModal cart={cart}/>
             </div>
           )}
           <div className="dropdown dropdown-end text-end pe-3 flex items-center">

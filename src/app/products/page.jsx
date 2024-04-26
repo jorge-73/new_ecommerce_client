@@ -30,7 +30,11 @@ const ProductsPage = () => {
           <div className="px-5 lg:px-30 xl:px-40 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
             {products &&
               products.map((product, idx) => (
-                <ProductCart key={idx} product={product} />
+                <ProductCart
+                  key={idx}
+                  product={product}
+                  isAdmin={user?.role === "admin" ? true : false}
+                />
               ))}
           </div>
           {/* <Footer /> */}

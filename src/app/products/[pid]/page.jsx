@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import useProduct from "@/store/ProductStore";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/navbar/Navbar";
+import { FaShoppingCart } from "react-icons/fa";
 
 const ProductsPage = () => {
+  const { user } = useAuth();
   const { getProductById } = useProduct();
   const params = useParams();
   const [thumbnailUrl, setThumbnailUrl] = useState("");
@@ -28,22 +31,26 @@ const ProductsPage = () => {
   return (
     <>
       <Navbar />
-        <div className="hero min-h-screen">
-          <div className="hero-content flex-col lg:flex-row-reverse bg-neutral glass rounded-md p-20 text-white">
-            <img
-              src={thumbnailUrl}
-              className="w-56 object-contain rounded-lg"
-            />
-            <div className="px-10 text-center">
-              <h1 className="text-5xl font-bold">{product?.title}</h1>
-              <p className="py-3">{product?.description}</p>
-              <p className="py-3">Price: ${product?.price}</p>
-              <p className="py-3">Category: {product?.category}</p>
-              <p className="py-3">Stock: {product?.stock}</p>
-              <button className="btn btn-primary">Buy now</button>
-            </div>
+      <div className="hero min-h-screen">
+        <div className="hero-content flex-col lg:flex-row-reverse bg-neutral glass rounded-md p-20 text-white shadow-lg shadow-slate-400">
+          <img src={thumbnailUrl} className="w-56 object-contain rounded-lg" />
+          <div className="px-10 text-center">
+            <h1 className="text-5xl font-bold">{product?.title}</h1>
+            <p className="py-3">{product?.description}</p>
+            <p className="py-3">Price: ${product?.price}</p>
+            <p className="py-3">Category: {product?.category}</p>
+            <p className="py-3">Stock: {product?.stock}</p>
+            <button
+              className={`btn btn-primary ${
+                user?.role === "admin" && "btn-disabled"
+              }`}
+            >
+              <FaShoppingCart />
+              Add to cart
+            </button>
           </div>
         </div>
+      </div>
     </>
   );
 };
