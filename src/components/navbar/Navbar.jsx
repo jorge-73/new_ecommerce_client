@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import useUsers from "@/store/UserStore";
@@ -9,10 +9,19 @@ import toast from "react-hot-toast";
 import CartModal from "../cartModal/CartModal";
 
 const Navbar = () => {
+  const [navOpacity, setNavOpacity] = useState(false);
   const { getCart, cart } = useCart();
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { imageUrl } = useUsers();
   const router = useRouter();
+
+  const scrollWindow = () => {
+    if (window.scrollY >= 100) {
+      setNavOpacity(true);
+    } else {
+      setNavOpacity(false);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -23,6 +32,18 @@ const Navbar = () => {
     }
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("scroll", scrollWindow);
+    return () => {
+      window.removeEventListener("scroll", scrollWindow);
+    };
+  }, []);
+
+  const cartLength =
+    (cart?.products &&
+      cart?.products.reduce((acc, prod) => acc + prod.quantity, 0)) ||
+    0;
+
   const handleLogout = () => {
     logout();
     toast("Good Bye!", {
@@ -32,7 +53,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-opacity duration-500 ${navOpacity ? "opacity-50" : "opacity-100"}`}>
       <div className="navbar bg-neutral-content">
         <div className="navbar-start">
           <div className="dropdown">
@@ -118,11 +139,16 @@ const Navbar = () => {
         <div className="navbar-end">
           {/* Carrito Icon */}
           {isAuthenticated && (
-            <div
-              className="btn btn-ghost btn-circle avatar relative"
-              style={{ fontSize: "1.5rem" }}
-            >
-              <CartModal cart={cart}/>
+            <div className={`indicator mx-3 ${user?.role === "admin" && "hidden"}`}>
+              <span className="indicator-item badge badge-primary m-1">
+                {cartLength}
+              </span>
+              <div
+                className="btn btn-ghost btn-circle avatar relative"
+                style={{ fontSize: "1.5rem" }}
+              >
+                <CartModal cart={cart} />
+              </div>
             </div>
           )}
           <div className="dropdown dropdown-end text-end pe-3 flex items-center">

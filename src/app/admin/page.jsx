@@ -20,16 +20,16 @@ const AdminPage = () => {
     <>
       <Navbar />
       {loading ? (
-        <div className=" text-center text-white">
+        <div className=" text-center text-white pt-16">
           <span className="loading loading-infinity loading-lg mt-3"></span>
         </div>
       ) : (
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 pt-16">
           <div className="lg:flex">
-            <div className="lg:w-1/2">
+            <div className="lg:w-5/12">
               <AdminForm />
             </div>
-            <div className="lg:w-1/2">
+            <div className="lg:w-7/12">
               <AdminTable />
             </div>
           </div>

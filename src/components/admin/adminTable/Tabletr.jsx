@@ -28,7 +28,7 @@ const Tabletr = ({ product, num }) => {
       <td>{product?.stock}</td>
       <td className="flex justify-center items-center">
         <button
-          className="btn btn-sm btn-error me-1"
+          className="btn btn-sm btn-error me-1 text-white"
           onClick={() => handleDelete(product?._id)}
         >
           <FaTrashAlt />

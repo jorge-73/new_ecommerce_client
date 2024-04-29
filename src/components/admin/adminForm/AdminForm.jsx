@@ -54,7 +54,7 @@ const AdminForm = () => {
       let res;
       if (params.pid) {
         // Si params.pid existe, estamos editando un producto existente
-        res = await updateProduct(params.pid, data);
+        res = await updateProduct(params.pid, formData);
       } else {
         // Si el parametro no existe, estamos creando un nuevo producto
         res = await createProduct(formData);
