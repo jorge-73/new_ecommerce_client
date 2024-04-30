@@ -16,6 +16,13 @@ const AdminPage = () => {
     }
   }, [loading, isAuthenticated]);
 
+  useEffect(() => {
+    if (user?.role !== "admin") {
+      router.push("/products");
+    }
+  }, [])
+  
+
   return (
     <>
       <Navbar />

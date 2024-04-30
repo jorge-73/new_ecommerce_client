@@ -10,6 +10,7 @@ import CartModal from "../cartModal/CartModal";
 
 const Navbar = () => {
   const [navOpacity, setNavOpacity] = useState(false);
+  const [isNavbarFixed, setIsNavbarFixed] = useState(false);
   const { getCart, cart } = useCart();
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { imageUrl } = useUsers();
@@ -18,8 +19,10 @@ const Navbar = () => {
   const scrollWindow = () => {
     if (window.scrollY >= 100) {
       setNavOpacity(true);
+      setIsNavbarFixed(true);
     } else {
       setNavOpacity(false);
+      setIsNavbarFixed(false);
     }
   };
 
@@ -53,7 +56,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-opacity duration-500 ${navOpacity ? "opacity-50" : "opacity-100"}`}>
+    <nav className={`${isNavbarFixed ? "fixed" : "absolute"} top-0 left-0 right-0 z-50 transition-opacity duration-500 ${navOpacity ? "opacity-50" : "opacity-100"}`}>
       <div className="navbar bg-neutral-content">
         <div className="navbar-start">
           <div className="dropdown">

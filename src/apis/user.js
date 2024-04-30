@@ -1,5 +1,6 @@
 import axios from "./axios";
 
+export const getAllUsersRequest = async () => axios.get("/users");
 export const changeRoleRequest = async (uid) =>
   axios.post(`/users/premium/${uid}`);
 export const addFilesRequest = async (uid, data) =>

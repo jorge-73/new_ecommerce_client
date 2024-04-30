@@ -23,9 +23,9 @@ const ProfileForm = ({ user }) => {
     <div className="flex justify-center">
       <div className="card shadow mt-3 p-3 bg-neutral-content w-2/6">
         <form encType="multipart/form-data" onSubmit={onSubmit}>
-          <div className="mb-3 flex items-center justify-evenly">
-            <label htmlFor="fileType" className="label">
-              Type of file
+          <div className="mb-3 flex items-center justify-center">
+            <label htmlFor="fileType" className="label font-bold">
+              Type of file: 
             </label>
             <select
               id="fileType"
@@ -37,9 +37,9 @@ const ProfileForm = ({ user }) => {
               <option value="document">Document</option>
             </select>
           </div>
-          <div className="mb-3 flex items-center justify-evenly">
-            <label htmlFor="file" className="label">
-              File
+          <div className="mb-3 flex items-center justify-center">
+            <label htmlFor="file" className="label font-bold">
+              File: 
             </label>
             <input
               type="file"
