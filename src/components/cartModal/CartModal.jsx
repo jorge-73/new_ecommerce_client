@@ -1,7 +1,13 @@
 import { FaShoppingCart } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import CartProduct from "./CartProduct";
+import useCart from "@/store/CartStore";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const CartModal = ({ cart }) => {
+  const router = useRouter();
+  const { deleteCart } = useCart();
   const subTotal =
     (cart?.products &&
       cart.products.reduce((acc, prod) => acc + prod.product.price, 0)) ||
@@ -9,13 +15,37 @@ const CartModal = ({ cart }) => {
   const shipping = 4.0;
   const tax = 4.0;
   const totalPurchase = subTotal && (subTotal + shipping + tax).toFixed(2);
+  const emptyCart =
+    cart?.products === undefined || cart?.products?.length === 0;
+
+  const handleEmptyCart = async (cid) => {
+    const res = await deleteCart(cid);
+    if (res?.error) return toast.error(res?.error);
+    toast.success("The cart has been emptied");
+  };
+
+  const handleCheckout = async (cid) => {
+    if (emptyCart) return toast.error("The cart is empty");
+
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Thank you for your purchase.!",
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+    setTimeout(() => {
+      router.push(`/payments/${cid}`);
+    }, 1200);
+  };
 
   return (
     <>
       <FaShoppingCart
-        onClick={() => document.getElementById("my_modal_5").showModal()}
+        onClick={() => document.getElementById("my_modal").showModal()}
       />
-      <dialog id="my_modal_5" className="modal">
+      <dialog id="my_modal" className="modal">
         <div className="modal-box w-11/12 max-w-5xl bg-neutral glass text-white">
           <div className="flex bg-slate-100 rounded-md text-black">
             <div className="w-1/2 p-4">
@@ -54,6 +84,7 @@ const CartModal = ({ cart }) => {
                 <button
                   type="button"
                   className="mt-6 text-sm px-6 py-2.5 w-full bg-[#333] hover:bg-[#111] text-white rounded-full"
+                  onClick={() => handleCheckout(cart._id)}
                 >
                   Check out
                 </button>
@@ -61,8 +92,16 @@ const CartModal = ({ cart }) => {
             </div>
           </div>
           <div className="modal-action">
+            {!emptyCart && (
+              <button
+                className="btn btn-sm btn-error font-bold"
+                onClick={() => handleEmptyCart(cart._id)}
+              >
+                Empty cart
+              </button>
+            )}
             <form method="dialog">
-              <button className="btn">Close</button>
+              <button className="btn btn-sm font-bold">Close</button>
             </form>
           </div>
         </div>

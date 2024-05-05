@@ -15,6 +15,7 @@ const ProductCart = ({ product, isAdmin }) => {
       : "/notAvailable.png";
 
   const addToCart = async (pid) => {
+    if (product?.stock === 0) return toast.error("No stock available for this product");
     const res = addProductToCart(user?.cart, pid);
     if (res.error) return toast.error(res.error);
 
@@ -35,7 +36,11 @@ const ProductCart = ({ product, isAdmin }) => {
         <p>{product?.description}</p>
         <div className="flex justify-between items-center">
           <p>${product?.price}</p>
-          <p className="text-end">Stock: {product?.stock}</p>
+          <p
+            className={`text-end ${product?.stock === 0 && "text-red-500 font-bold"}`}
+          >{`${
+            product?.stock === 0 ? "Out of stock" : `Stock: ${product.stock}`
+          } `}</p>
         </div>
         <div className="card-actions justify-between items-center">
           <Link href={`/products/${product?._id}`} className="btn btn-accent">
@@ -45,6 +50,7 @@ const ProductCart = ({ product, isAdmin }) => {
           <button
             onClick={() => addToCart(product?._id)}
             className={`btn btn-primary ${isAdmin && "btn-disabled"}`}
+            disabled={product.stock === 0}
           >
             <FaShoppingCart />
             Add to cart

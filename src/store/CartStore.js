@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { addProductToCartRequest, deleteProductInCartRequest, getCartRequest } from "@/apis/carts";
+import {
+  addProductToCartRequest,
+  deleteProductInCartRequest,
+  getCartRequest,
+  deleteCartRequest,
+} from "@/apis/carts";
 
 const useCart = create((set) => ({
   // Estado inicial del contexto del carrito
@@ -40,7 +45,18 @@ const useCart = create((set) => ({
       set({ errors: error.response.data, loading: false });
       return error.response.data;
     }
-  }
+  },
+
+  deleteCart: async (cid) => {
+    try {
+      await deleteCartRequest(cid);
+      const res = await getCartRequest(cid);
+      set({ cart: res.data.payload, errors: [], loading: false });
+    } catch (error) {
+      set({ errors: error.response.data, loading: false });
+      return error.response.data;
+    }
+  },
 }));
 
 export default useCart;
